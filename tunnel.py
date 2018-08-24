@@ -25,14 +25,23 @@ class Tunnel(object):
             downName = 'RETR ' + fileName
             self.ftp.retrbinary(downName, fw)
 
-    def test(self):
-        self.downPath = r'python\pythonFunc\theirFTP'
+    def downPath(self, path):
+        self.downPath = 'python\\pythonFunc\\' + path
         self.ftp.cwd(self.downPath)
         self.ftp.dir(self.fileInfoCB)
+        filePath = '..\\' + path
+        try:
+            os.mkdir(filePath)
+        except Exception as e:
+            print(e)
+
         for fileName in self.fileList:
-            with open(fileName, 'wb') as fw:
+            with open(filePath + '\\' + fileName, 'wb') as fw:
                 downName = 'RETR ' + fileName
                 self.ftp.retrbinary(downName, fw.write)
+
+    def test(self):
+        self.downPath('bmob')
 
 
 if __name__ == '__main__':
